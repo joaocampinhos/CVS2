@@ -46,16 +46,33 @@ class Bank {
    * Add New Account *
   \*-----------------*/
 
-  void addnewAccount(int code)
+  boolean addnewAccount(int code)
     //@ requires BankInv(this,?n,?m) &*& n < m &*& code >= 0;
-    //@ ensures  BankInv(this,n+1,m);
+    //@ ensures result ? BankInv(this,n,m) : BankInv(this,n+1,m);
   {
+    //Códigos têm de ser únicos
+    int i = 0;
+    boolean rep = false;
 
-    // @ array_slice_split(store, nelems,nelems+1);
-    BankAccount c = new BankAccount(code);
-    store[nelems] = c;
-    //@ array_slice_deep_close(store, nelems, AccountP, unit);
-    nelems = nelems + 1;
+    //@ open BankInv(this,n,m);
+    while (i < nelems)
+      //@ invariant BankInv(this,n,m) &*& 0 <= i &*& i <= n;
+    {
+      if ( store[i].getcode() == code) {
+        rep = true;
+      }
+      i = i + 1;
+    }
+
+    if (!rep) {
+      // @ array_slice_split(store, nelems,nelems+1);
+      BankAccount c = new BankAccount(code);
+      store[nelems] = c;
+      //@ array_slice_deep_close(store, nelems, AccountP, unit);
+      nelems = nelems + 1;
+    }
+
+    return rep;
   }
 
 
@@ -239,7 +256,7 @@ class Bank {
     {
       if ( store[i].getcode() == code) {
         if (i<nelems-1) {
-          store[i] == store[nelems-1];
+          store[i] = store[nelems-1];
         }
         nelems = nelems - 1;
         store[nelems] = null;
@@ -282,5 +299,18 @@ class Bank {
     store = newstore;
     return;
   }
+
+  /*  Testeszinhos
+  public static void main(String[] args)
+    //@ requires true;
+    //@ ensures true;
+  {
+    Bank novobanco = new Bank(3);
+    novobanco.addnewAccount(1);
+    novobanco.addnewAccount(1);
+    novobanco.addnewAccount(3);
+    System.out.println(novobanco.nelems);
+  }
+  */
 
 }
