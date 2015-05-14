@@ -150,7 +150,7 @@ class Bank {
       //@ invariant BankInv(this,n,m) &*& 0 <= i &*& i <= n;
     {
       if ( store[i].getcode() == code) {
-        return store[i].deposit(v);
+        store[i].deposit(v);
         return v;
       }
       i = i + 1;
