@@ -1,4 +1,12 @@
+/*
+VERIFAST example of verified Java progra
+CVS course 14-15
+Integrated Master in Computer Science and Engineering
+@FCT UNL Luis Caires 2015
+*/
+
 /*@
+
 predicate AccountInv(BankAccount ac; int b, int c) =
     ac.accountid |-> ?id
     &*&
@@ -7,6 +15,8 @@ predicate AccountInv(BankAccount ac; int b, int c) =
     ac.balance |-> b
     &*& 
     ac.climit |-> c
+    &*&
+    c >= 0
     &*&
     b + c >= 0;
 @*/
@@ -24,6 +34,13 @@ public BankAccount(int id)
     balance = 0;
     climit = 0;
     accountid = id;
+}
+
+public void deposit(int v)
+//@ requires AccountInv(this,?b,?c) &*& v >= 0;
+//@ ensures AccountInv(this,b+v,c);
+{
+balance += v;
 }
 
 public void withdraw(int v)
@@ -50,6 +67,14 @@ public int getbalance()
    return balance;
 }
 
+public void setclimit(int cl)
+//@ requires AccountInv(this,?b,?c) &*& cl >= 0 &*& cl+b>=0;
+//@ ensures AccountInv(this,b,cl);
+
+{
+    climit = cl;
+}
+
 public int getclimit()
 //@ requires AccountInv(this,?b,?c);
 //@ ensures AccountInv(this,b,c) &*& result == c;
@@ -58,30 +83,13 @@ public int getclimit()
    return climit;
 }
 
-public void merge(BankAccount ac)
-//@ requires AccountInv(this,?b,?c) &*& ac != null &*& AccountInv(ac,?b0,?a0);
-//@ ensures AccountInv(this,b+b0,c+a0);
-
-{
-//@ open AccountInv(ac,b0,a0);
- balance = balance + ac.getbalance();
- climit = climit + ac.getclimit();
-}
-
-static public void main()
+static void main()
 //@ requires true;
 //@ ensures true;
-
 {
- BankAccount a1 = new BankAccount(10);
-
-//@ assert AccountInv(a1,0,0);
-
-int v = a1.getbalance();
-
-//@ assert v == 0;
+BankAccount b1 = new BankAccount(1000);
+b1.setclimit(500);
 
 }
-
 
 }
