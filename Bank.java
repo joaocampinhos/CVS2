@@ -52,6 +52,24 @@ void addnewAccount(int code)
         nelems = nelems + 1;
 }
 
+int getclimit(int code)
+//@ requires BankInv(this,?n,?m);
+//@ ensures BankInv(this,n,m);
+{
+  int i = 0;
+
+  //@ open BankInv(this,n,m);
+  while (i < nelems)
+  //@ invariant BankInv(this,n,m) &*& 0 <= i &*& i <= n;
+  {
+     if ( store[i].getcode() == code) {
+     	return store[i].getclimit();
+     }
+     i = i + 1;
+  }
+  return -1;
+}
+
 int getbalance(int code)
 //@ requires BankInv(this,?n,?m);
 //@ ensures BankInv(this,n,m);
