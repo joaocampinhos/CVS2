@@ -130,7 +130,7 @@ class Bank {
       }
       i = i + 1;
     }
-    return -1;
+    return Integer.MIN_VALUE;
   }
 
 
