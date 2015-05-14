@@ -11,9 +11,9 @@ predicate AccountInv(BankAccount ac; int b, int c) =
     ac.accountid |-> ?id
     &*&
     id >= 0
-    &*& 
+    &*&
     ac.balance |-> b
-    &*& 
+    &*&
     ac.climit |-> c
     &*&
     c >= 0

@@ -67,9 +67,7 @@ class Bank {
   int setclimit(int code, int cl)
     //@ requires BankInv(this,?n,?m) &*& cl >= 0;
     //@ ensures BankInv(this,n,m);
-    // Verificar se não ficamos com um balance + climit < 0
   {
-    /*
     int i = 0;
 
     //@ open BankInv(this,n,m);
@@ -77,12 +75,13 @@ class Bank {
       //@ invariant BankInv(this,n,m) &*& 0 <= i &*& i <= n;
     {
       if ( store[i].getcode() == code) {
-        return store[i].setclimit(cl);
-        return cl;
+        if (store[i].getbalance() + cl >= 0) {
+          store[i].setclimit(cl);
+          return cl;
+        }
       }
       i = i + 1;
     }
-    */
     return -1;
   }
 
@@ -168,9 +167,7 @@ class Bank {
   int withdraw(int code, int v)
     //@ requires BankInv(this,?n,?m) &*& v >= 0;
     //@ ensures BankInv(this,n,m);
-    // Verificar que só tiramos se pudermos
   {
-    /*
     int i = 0;
 
     //@ open BankInv(this,n,m);
@@ -178,12 +175,13 @@ class Bank {
       //@ invariant BankInv(this,n,m) &*& 0 <= i &*& i <= n;
     {
       if ( store[i].getcode() == code) {
-        store[i].withdraw(v);
-        return v;
+        if (store[i].getbalance() + store[i].getclimit() >= v) {
+          store[i].withdraw(v);
+          return v;
+        }
       }
       i = i + 1;
     }
-    */
     return -1;
   }
 
@@ -196,7 +194,6 @@ class Bank {
   boolean transfer(int code_from, int code_to, int v)
     //@ requires BankInv(this,?n,?m) &*& v >= 0;
     //@ ensures BankInv(this,n,m);
-    // Verificar se não se perdeu dinheiro no caminho
   {
     int i = 0;
     int from = -1;
