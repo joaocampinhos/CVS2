@@ -64,11 +64,12 @@ class Bank {
    * Set Credit Limit *
   \*----------------- */
 
-  /*
   int setclimit(int code, int cl)
     //@ requires BankInv(this,?n,?m) &*& cl >= 0;
     //@ ensures BankInv(this,n,m);
+    // Verificar se não ficamos com um balance + climit < 0
   {
+    /*
     int i = 0;
 
     //@ open BankInv(this,n,m);
@@ -81,9 +82,9 @@ class Bank {
       }
       i = i + 1;
     }
+    */
     return -1;
   }
-  */
 
 
 
@@ -164,6 +165,27 @@ class Bank {
    *    Withdraw    *
   \*----------------*/
 
+  int withdraw(int code, int v)
+    //@ requires BankInv(this,?n,?m) &*& v >= 0;
+    //@ ensures BankInv(this,n,m);
+    // Verificar que só tiramos se pudermos
+  {
+    /*
+    int i = 0;
+
+    //@ open BankInv(this,n,m);
+    while (i < nelems)
+      //@ invariant BankInv(this,n,m) &*& 0 <= i &*& i <= n;
+    {
+      if ( store[i].getcode() == code) {
+        store[i].withdraw(v);
+        return v;
+      }
+      i = i + 1;
+    }
+    */
+    return -1;
+  }
 
 
 
@@ -171,6 +193,37 @@ class Bank {
    *    Transfer    *
   \*----------------*/
 
+  boolean transfer(int code_from, int code_to, int v)
+    //@ requires BankInv(this,?n,?m) &*& v >= 0;
+    //@ ensures BankInv(this,n,m);
+    // Verificar se não se perdeu dinheiro no caminho
+  {
+    int i = 0;
+    int from = -1;
+    int to = -1;
+
+    //@ open BankInv(this,n,m);
+    while (i < nelems)
+      //@ invariant BankInv(this,n,m) &*& 0 <= i &*& i <= n;
+    {
+      if ( store[i].getcode() == code_from) {
+        from = i;
+      }
+      if ( store[i].getcode() == code_to) {
+        to = i;
+      }
+      i = i + 1;
+    }
+
+    int parcial = withdraw(from, v);
+
+    if (parcial != -1) {
+      deposit(to, v);
+      return true;
+    }
+
+    return false;
+  }
 
 
 
