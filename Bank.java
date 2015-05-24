@@ -1,8 +1,9 @@
 /*
-   VERIFAST example of verified Java progra
    CVS course 14-15
    Integrated Master in Computer Science and Engineering
-   @FCT UNL Luis Caires 2015
+   @FCT UNL
+   João Campinhos 41721
+   Pedro Durães   41911
 */
 
 /*@
@@ -299,18 +300,5 @@ class Bank {
     store = newstore;
     return;
   }
-
-  /*  Testeszinhos
-  public static void main(String[] args)
-    //@ requires true;
-    //@ ensures true;
-  {
-    Bank novobanco = new Bank(3);
-    novobanco.addnewAccount(1);
-    novobanco.addnewAccount(1);
-    novobanco.addnewAccount(3);
-    System.out.println(novobanco.nelems);
-  }
-  */
 
 }
